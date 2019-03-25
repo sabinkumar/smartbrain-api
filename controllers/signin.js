@@ -5,13 +5,13 @@ const handleSignin = (req, res, db, bcrypt) => {
 		return res.status(400).json('incorrect form submission'); //use of return will halt the execution here in case true
 	}
 	db.select('email', 'hash').from('login')
-	.where('email','=', req.body.email)
+	.where('email','=', email)
 	.then(data => {
 		// console.log(data)
-		const isValid = bcrypt.compareSync(req.body.password, data[0].hash); //here its like we are using object as array
+		const isValid = bcrypt.compareSync(password, data[0].hash); //here its like we are using object as array
 		//console.log(data[0].hash); //made a mistake in signin where 
 		if (isValid) {
-			return db.select('*').from('users').where('email','=',req.body.email) //always use return so that this database knows about it
+			return db.select('*').from('users').where('email','=',email) //always use return so that this database knows about it
 			.then(user => {
 				res.json(user[0])				
 			})
